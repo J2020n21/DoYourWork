@@ -11,6 +11,16 @@ function App() {
   const [mode,setMode] = useState('calendar')
   const [click,setClick] = useState(0)
   const [show,setShow] = useState(0)
+  const [todoList, setTodoList] = useState([{}])
+
+
+  useEffect(()=>{
+    //추가 요청을 받으면 재랜더링한다
+    fetch("/addTodo").then(res => res.json())
+    .then( data =>{
+      setTodoList(data)
+    })
+  },[])
 
   const handleMode = () =>{
     let copy = click
@@ -29,7 +39,11 @@ function App() {
     <input type='text' name='todo'/>
     <button type='submit'>전송</button>
   </form>
-  {show === 0? null:<Todolist/>}
+  {show === 0? null:
+    todoList.todo.map((ele,i)=>{
+      <p>{ele}</p>
+    })
+    }
   </>);
 }
 

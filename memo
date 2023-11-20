@@ -1,0 +1,12 @@
+todolist
+
+보여주기:
+get; db에 정보가 있으면 보여준다. 없으면 비운다.
+
+
+사용하기:
+post ;내용이 공백이 아니면 post요청을 한다
+update; db에 하나이상 수정할 todo가 있으면
+delete; 
+
+https://www.youtube.com/watch?v=urg-a6i0HEc

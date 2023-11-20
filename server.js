@@ -32,13 +32,18 @@ app.get('/',(req,res)=>{
     res.sendFile('index.html')
 })
 
-app.post('/addTodo', async (req,res)=>{
+app.get('/addTodo',(req,res)=>{
+  res.write("요청성공");
+})
+
+app.post('/addTodo',(req,res)=>{
   console.log('addTodo 요청됨');
   if(res.body.todo == ''){
     res.send('비어있습니다.')
   } else{
       try{
-        await db.collection('todo').insertOne({content: req.body.todo})
+        console.log("데이터 저장하기")
+        res.json({"todo":["공부","청소","산책"]})
       }
       catch(e){
         console.log(e)
