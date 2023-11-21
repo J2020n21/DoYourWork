@@ -32,26 +32,27 @@ app.get('/',(req,res)=>{
     res.sendFile('index.html')
 })
 
-app.get('/addTodo',(req,res)=>{
-  res.write("요청성공");
+app.get('/getReq.json',(req,res)=>{
+  res.json([{'name':'성공','type':'get'}])
+  //http://localhost:8080/getReq.json으로 들어가면 json 데이터를 볼 수 있다
 })
 
 app.post('/addTodo',(req,res)=>{
-  console.log('addTodo 요청됨');
-  if(res.body.todo == ''){
-    res.send('비어있습니다.')
-  } else{
-      try{
-        console.log("데이터 저장하기")
-        res.json({"todo":["공부","청소","산책"]})
-      }
-      catch(e){
-        console.log(e)
-      }
-    res.redirect('/')
+  try{
+    const {todo} = req.body
+    if(todo==''){alert("공백입니다.")}
+    else{
+      db.collection('todo_list').insertOne({content:todo})
+      res.json(todo)
+    }
+  }
+  catch(error){
+    console.log("Error:"+error);
   }
 })
 
 app.get('*', function (req, res) {
   res.sendFile(__dirname, '/react-project/build/index.html');
 });
+
+

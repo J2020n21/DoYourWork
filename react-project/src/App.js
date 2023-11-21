@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import axios, * as others from 'axios';
 import {Grid, Box, Container, FormControl, FormLabel, Input, InputLabel,
   Select, Typography
    ,Button} from '@mui/material';
@@ -10,17 +11,42 @@ import Clock from './component/Clock';
 function App() {
   const [mode,setMode] = useState('calendar')
   const [click,setClick] = useState(0)
-  const [show,setShow] = useState(0)
+  const [show,setShow] = useState(1)
+  const [todo,setTodo] = useState(null)
   const [todoList, setTodoList] = useState([{}])
+  const [data,setData] = useState("수정이전")
 
+  // const axios = require('axios');
 
-  useEffect(()=>{
-    //추가 요청을 받으면 재랜더링한다
-    fetch("/addTodo").then(res => res.json())
-    .then( data =>{
-      setTodoList(data)
+  // useEffect(()=>{
+  //   //추가 요청을 받으면 재랜더링한다
+  //   fetch("/addTodo").then(res => res.json())
+  //   .then( data =>{
+  //     setTodoList(data)
+  //   })
+  // },[])
+  const handleGetRequest = () => {
+    //DB에 저장된 todo를 가져와서 todoList에 set한다.
+    axios.get('http://localhost:8080/getReq.json')
+      .then((res) => {
+        console.log(res.data);
+        setData(res.data);
+        setTodoList(res.data);
+      })
+      .catch((e) => {
+        alert("실패: " + e);
+      });
+    }
+
+  const handleAddTodo = ()=>{
+    //post 요청을 data(todo)와 함께 보낸다. 응답을 받아서 설정한다.
+    axios.post('http://localhost:8080/addTodo',{todo})
+    .then(async (res)=>{
+      await console.log(res.data); //나옴
+      await setTodoList(res.data);
     })
-  },[])
+    .catch((e)=>{console.log(e)})
+  }
 
   const handleMode = () =>{
     let copy = click
@@ -35,16 +61,29 @@ function App() {
     <Button variant='contained'
      onClick={handleMode}>{mode}</Button>
 
-  <form action='/addTodo' method='POST'>
-    <input type='text' name='todo'/>
-    <button type='submit'>전송</button>
+  <form>
+    <input type='text' name='todo' value={todo}
+      onChange={(e)=>setTodo(e.target.value)}/>
+    <button type='button' onClick={()=>{handleAddTodo()}}>할일 작성</button>
   </form>
-  {show === 0? null:
-    todoList.todo.map((ele,i)=>{
-      <p>{ele}</p>
-    })
-    }
-  </>);
-}
 
+  {show === 0? <p>투두리스트 안보임</p>:
+    
+    todoList && todoList.map((ele,i)=>{return(
+      <p>{JSON.stringify(ele.content)}</p>
+    )})
+    
+    }
+{console.log({todoList})}
+<form>
+    <input type='text' name='todo'/>
+    <button type='button' onClick={()=>{handleGetRequest()}}>
+      get</button>
+  </form>
+{
+  data? <div>{JSON.stringify(data)}</div>:null
+}
+  </>);
+
+}
 export default App;

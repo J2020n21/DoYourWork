@@ -10,3 +10,7 @@ update; db에 하나이상 수정할 todo가 있으면
 delete; 
 
 https://www.youtube.com/watch?v=urg-a6i0HEc
+
+
+todo
+1.post가 단발성이다. = db에 저장해서 활용하자.
