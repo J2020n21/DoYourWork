@@ -13,24 +13,23 @@ function App() {
   const [click,setClick] = useState(0)
   const [show,setShow] = useState(1)
   const [todo,setTodo] = useState(null)
-  const [todoList, setTodoList] = useState([{}])
-  const [data,setData] = useState("수정이전")
+  const [todoList, setTodoList] = useState([])//{'content':'이거하기'}
 
-  // const axios = require('axios');
+  //처음 루트에 접속하면, get요청을 보낸다. 그걸 받아와서 변수에 넣는다.
+  //이후로는 handleAddTodo요청이 보내져서 todoList가 변할 때마다 이걸 시행한다(갱신)
 
   // useEffect(()=>{
-  //   //추가 요청을 받으면 재랜더링한다
-  //   fetch("/addTodo").then(res => res.json())
-  //   .then( data =>{
-  //     setTodoList(data)
-  //   })
-  // },[])
+  //   axios.get('http://localhost:8080/')
+  //     .then((res)=>{
+  //       console.log(res)
+  //     })
+  // },[todoList])
+
   const handleGetRequest = () => {
     //DB에 저장된 todo를 가져와서 todoList에 set한다.
     axios.get('http://localhost:8080/getReq.json')
       .then((res) => {
         console.log(res.data);
-        setData(res.data);
         setTodoList(res.data);
       })
       .catch((e) => {
@@ -43,9 +42,21 @@ function App() {
     axios.post('http://localhost:8080/addTodo',{todo})
     .then(async (res)=>{
       await console.log(res.data); //나옴
-      await setTodoList(res.data);
+      // await setTodoList(res.data.content); //todoList에 추가하기
+      await setTodoList([...todoList, res.data])
+      await setTodo('');
     })
     .catch((e)=>{console.log(e)})
+  }
+
+  const deleteTodo = (task) =>{
+    axios.delete(`http://localhost:8080/deleteTodo/${task}`)
+    .then(
+      setTodoList(prev => {
+        return prev.filter(todo => todo !== task);
+      })
+    )
+    .catch(e=>console.log(e))
   }
 
   const handleMode = () =>{
@@ -67,22 +78,18 @@ function App() {
     <button type='button' onClick={()=>{handleAddTodo()}}>할일 작성</button>
   </form>
 
-  {show === 0? <p>투두리스트 안보임</p>:
-    
-    todoList && todoList.map((ele,i)=>{return(
-      <p>{JSON.stringify(ele.content)}</p>
+  {show === 0 && todoList? null:
+    todoList.map((task)=>{return(
+    <div>
+      <p>{task}</p>
+      <button type='button' onClick={()=>{
+        deleteTodo(task); 
+        console.log("delete todo is:"+task)}}>X</button>
+    </div>
     )})
-    
-    }
-{console.log({todoList})}
-<form>
-    <input type='text' name='todo'/>
-    <button type='button' onClick={()=>{handleGetRequest()}}>
-      get</button>
-  </form>
-{
-  data? <div>{JSON.stringify(data)}</div>:null
-}
+  }
+  {console.log({todoList})}
+
   </>);
 
 }
