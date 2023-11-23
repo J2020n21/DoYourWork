@@ -6,7 +6,7 @@ app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 app.use(express.json());
 var cors = require('cors');
-app.use(cors());
+app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true})); //res.body로 사용
@@ -29,9 +29,7 @@ new MongoClient(url).connect().then((client)=>{
 app.use(express.static(__dirname + '/react-project/build'))
 
 app.get('/', async (req,res)=>{
-
   res.sendFile('index.html')
-  //
   // console.log(db.collection('todo_list').find().toArray());
 })
 
@@ -39,8 +37,7 @@ app.get('/', async (req,res)=>{
 app.get('/getTodo',async(req,res)=>{
   try{
   const todos = await db.collection('todo_list').find().toArray();
-  console.log(todos)
-  await res.json(todos)
+  await res.json(todos) 
   }
   catch(e){
     console.log(e)

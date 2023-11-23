@@ -13,14 +13,13 @@ function App() {
   const [click,setClick] = useState(0)
   const [show,setShow] = useState(1)
   const [todo,setTodo] = useState(null)
-  const [todoList, setTodoList] = useState([])//{'content':'청소하기'}
-//[{}{}{}]
+  const [todoList, setTodoList] = useState([])
+
   useEffect(()=>{
    axios.get('http://localhost:8080/getTodo')
       .then(async(res)=>{
-        //todo라는 배열 안에 내용만 밀어넣는다
-        await setTodoList(prev=>{})
-        console.log("get request happened:"+res.data); //undefined
+        let nowContent = res.data.map((ele)=>ele.content)
+        await setTodoList([...todoList, ...nowContent])
       })
       .catch(e=>console.log("error:"+e))
   },[])
@@ -43,6 +42,7 @@ function App() {
     .then(async (res)=>{
       await console.log(res.data); //나옴
       // await setTodoList(res.data.content); //todoList에 추가하기
+      await setTodoList([]);
       await setTodoList([...todoList, res.data])
       await setTodo('');
     })
@@ -82,9 +82,7 @@ function App() {
     todoList.map((task)=>{return(
     <div>
       <p>{task}</p>
-      <button type='button' onClick={()=>{
-        deleteTodo(task); 
-        console.log("delete todo is:"+task)}}>X</button>
+      <button type='button' onClick={()=>{deleteTodo(task)}}>X</button>
     </div>
     )})
   }
