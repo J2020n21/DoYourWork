@@ -13,17 +13,17 @@ function App() {
   const [click,setClick] = useState(0)
   const [show,setShow] = useState(1)
   const [todo,setTodo] = useState(null)
-  const [todoList, setTodoList] = useState([])//{'content':'이거하기'}
-
-  //처음 루트에 접속하면, get요청을 보낸다. 그걸 받아와서 변수에 넣는다.
-  //이후로는 handleAddTodo요청이 보내져서 todoList가 변할 때마다 이걸 시행한다(갱신)
-
-  // useEffect(()=>{
-  //   axios.get('http://localhost:8080/')
-  //     .then((res)=>{
-  //       console.log(res)
-  //     })
-  // },[todoList])
+  const [todoList, setTodoList] = useState([])//{'content':'청소하기'}
+//[{}{}{}]
+  useEffect(()=>{
+   axios.get('http://localhost:8080/getTodo')
+      .then(async(res)=>{
+        //todo라는 배열 안에 내용만 밀어넣는다
+        await setTodoList(prev=>{})
+        console.log("get request happened:"+res.data); //undefined
+      })
+      .catch(e=>console.log("error:"+e))
+  },[])
 
   const handleGetRequest = () => {
     //DB에 저장된 todo를 가져와서 todoList에 set한다.

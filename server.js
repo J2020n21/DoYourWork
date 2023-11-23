@@ -29,11 +29,22 @@ new MongoClient(url).connect().then((client)=>{
 app.use(express.static(__dirname + '/react-project/build'))
 
 app.get('/', async (req,res)=>{
-  //할일목록 db에서 읽어서 보내주기
-  res.sendFile('index.html');
-  // await res.json(db.collection('todo_list').find().toArray());
-  // console.log(db.collection('todo_list').find().toArray());
 
+  res.sendFile('index.html')
+  //
+  // console.log(db.collection('todo_list').find().toArray());
+})
+
+
+app.get('/getTodo',async(req,res)=>{
+  try{
+  const todos = await db.collection('todo_list').find().toArray();
+  console.log(todos)
+  await res.json(todos)
+  }
+  catch(e){
+    console.log(e)
+  }
 })
 
 app.get('/getReq.json',(req,res)=>{
@@ -60,7 +71,7 @@ app.delete('/deleteTodo/:task', async (req,res)=>{
   const task = req.params.task;
   try{
   await db.collection('todo_list').deleteOne({content:task})
-  console.log("delete task:"+task);
+  // console.log("delete task:"+task);
   }
   catch(e){
     console.log("delete error:" + e);
