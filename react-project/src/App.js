@@ -18,6 +18,7 @@ function App() {
   useEffect(()=>{
    axios.get('http://localhost:8080/getTodo')
       .then(async(res)=>{
+        setTodoList([])
         let nowContent = res.data.map((ele)=>ele.content)
         await setTodoList([...todoList, ...nowContent])
       })

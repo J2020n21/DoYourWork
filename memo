@@ -14,5 +14,6 @@ https://www.youtube.com/watch?v=urg-a6i0HEc
 //multi request
 https://baegofda.tistory.com/215
 
-todo
-1.post가 단발성이다. = db에 저장해서 활용하자.
+타이머 구현시 활용
+//https://velog.io/@dianestar/JavaScript-React-React%EC%97%90%EC%84%9C-setInterval%EC%9D%98-%ED%99%9C%EC%9A%A9
+
