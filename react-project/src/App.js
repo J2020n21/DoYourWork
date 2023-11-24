@@ -7,41 +7,33 @@ import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css';
 import Todolist from './views/Todolist.ejs';
 import Clock from './component/Clock';
+import Timer from './component/Timer';
 
 function App() {
   const [mode,setMode] = useState('calendar')
   const [click,setClick] = useState(0)
-  const [show,setShow] = useState(1)
+  const [showTodo,setShowTodo] = useState(1)
   const [todo,setTodo] = useState(null)
   const [todoList, setTodoList] = useState([])
+  const [showTimer, setShowTimer] = useState(0)
 
   useEffect(()=>{
+    setTodoList([])
    axios.get('http://localhost:8080/getTodo')
       .then(async(res)=>{
-        setTodoList([])
         let nowContent = res.data.map((ele)=>ele.content)
         await setTodoList([...todoList, ...nowContent])
       })
       .catch(e=>console.log("error:"+e))
+      //문제: 서버 재기동 시 todo가 반복되어서 밑에 한 번 더 나타남
+      //단순 브라우저 새로고침은 문제없음
   },[])
-
-  const handleGetRequest = () => {
-    //DB에 저장된 todo를 가져와서 todoList에 set한다.
-    axios.get('http://localhost:8080/getReq.json')
-      .then((res) => {
-        console.log(res.data);
-        setTodoList(res.data);
-      })
-      .catch((e) => {
-        alert("실패: " + e);
-      });
-    }
 
   const handleAddTodo = ()=>{
     //post 요청을 data(todo)와 함께 보낸다. 응답을 받아서 설정한다.
     axios.post('http://localhost:8080/addTodo',{todo})
     .then(async (res)=>{
-      await console.log(res.data); //나옴
+      await console.log(res.data);
       // await setTodoList(res.data.content); //todoList에 추가하기
       await setTodoList([]);
       await setTodoList([...todoList, res.data])
@@ -60,32 +52,43 @@ function App() {
     .catch(e=>console.log(e))
   }
 
+  const updateTodo = () =>{
+    //todo: make function- update the specific task user clicked.
+  }
+
   const handleMode = () =>{
-    let copy = click
-    setClick(copy+1)
+    setClick(prevClick => prevClick+1)
     click%2 === 1? setMode('calendar'):setMode('clock')
+  }
+  
+  const handleTimer = () =>{
+    showTimer === 0? setShowTimer(1): setShowTimer(0)
   }
 
   return (
     <>
     {mode === 'calendar'? <Calendar/>:<Clock/>}
-    
-    <Button variant='contained'
-     onClick={handleMode}>{mode}</Button>
-
+    {showTimer === 1? <Timer/>:null}
+    <Button variant='contained' onClick={handleMode}>{mode}</Button>
+    <Button variant='contained' onClick={handleTimer}>Timer</Button>
+ 
   <form>
     <input type='text' name='todo' value={todo}
       onChange={(e)=>setTodo(e.target.value)}/>
     <button type='button' onClick={()=>{handleAddTodo()}}>할일 작성</button>
+    <button type='button' onClick={()=>{showTodo===1? setShowTodo(0):setShowTodo(1)}}>접기</button>
   </form>
 
-  {show === 0 && todoList? null:
+  {showTodo === 1 && todoList?
+  //전체 todoList에 스크롤 달기 
     todoList.map((task)=>{return(
     <div>
       <p>{task}</p>
-      <button type='button' onClick={()=>{deleteTodo(task)}}>X</button>
+      <button type='button' onClick={()=>{deleteTodo(task)}}>삭제</button>
+      <button type='button'>수정</button>
     </div>
     )})
+    :null
   }
   {console.log({todoList})}
 

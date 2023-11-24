@@ -5,7 +5,7 @@ export default function Clock() {
   let intervalId;
 
   useEffect(()=>{
-    //1초마다 다음의 코드를 시행한다.
+    if(intervalId) {clearInterval(intervalId)};
     intervalId = setInterval(() => {
       let copy = new Date().toLocaleTimeString()
       setNowTime(copy)
@@ -18,4 +18,3 @@ export default function Clock() {
     :<p>{nowTime}</p>
   )
 }
-//17:00시738546063

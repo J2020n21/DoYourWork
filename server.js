@@ -30,9 +30,7 @@ app.use(express.static(__dirname + '/react-project/build'))
 
 app.get('/', async (req,res)=>{
   res.sendFile('index.html')
-  // console.log(db.collection('todo_list').find().toArray());
 })
-
 
 app.get('/getTodo',async(req,res)=>{
   try{
@@ -42,11 +40,6 @@ app.get('/getTodo',async(req,res)=>{
   catch(e){
     console.log(e)
   }
-})
-
-app.get('/getReq.json',(req,res)=>{
-  res.json([{'name':'성공','type':'get'}])
-  //http://localhost:8080/getReq.json으로 들어가면 json 데이터를 볼 수 있다
 })
 
 app.post('/addTodo',(req,res)=>{
