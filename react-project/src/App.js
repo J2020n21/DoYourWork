@@ -34,7 +34,6 @@ function App() {
     axios.post('http://localhost:8080/addTodo',{todo})
     .then(async (res)=>{
       await console.log(res.data);
-      // await setTodoList(res.data.content); //todoList에 추가하기
       await setTodoList([]);
       await setTodoList([...todoList, res.data])
       await setTodo('');
@@ -65,34 +64,34 @@ function App() {
     showTimer === 0? setShowTimer(1): setShowTimer(0)
   }
 
+
+
   return (
-    <>
-    {mode === 'calendar'? <Calendar/>:<Clock/>}
-    {showTimer === 1? <Timer/>:null}
-    <Button variant='contained' onClick={handleMode}>{mode}</Button>
-    <Button variant='contained' onClick={handleTimer}>Timer</Button>
- 
-  <form>
-    <input type='text' name='todo' value={todo}
-      onChange={(e)=>setTodo(e.target.value)}/>
-    <button type='button' onClick={()=>{handleAddTodo()}}>할일 작성</button>
-    <button type='button' onClick={()=>{showTodo===1? setShowTodo(0):setShowTodo(1)}}>접기</button>
-  </form>
+  <div style={{textAlign:'center'}}>
+      {mode === 'calendar'? <Calendar/>:<Clock/>}
+      {showTimer === 1? <Timer/>:null}
+      <Button variant='contained' onClick={handleMode}>{mode}</Button>
+      <Button variant='contained' onClick={handleTimer}>Timer</Button>
+  
+    <form>
+      <input type='text' name='todo' value={todo}
+        onChange={(e)=>setTodo(e.target.value)}/>
+      <button type='button' onClick={()=>{handleAddTodo()}}>할일 작성</button>
+      <button type='button' onClick={()=>{showTodo===1? setShowTodo(0):setShowTodo(1)}}>접기</button>
+    </form>
 
-  {showTodo === 1 && todoList?
-  //전체 todoList에 스크롤 달기 
-    todoList.map((task)=>{return(
-    <div>
-      <p>{task}</p>
-      <button type='button' onClick={()=>{deleteTodo(task)}}>삭제</button>
-      <button type='button'>수정</button>
-    </div>
-    )})
-    :null
-  }
-  {console.log({todoList})}
-
-  </>);
+    {showTodo === 1 && todoList?
+    //전체 todoList에 스크롤 달기 
+      todoList.map((task)=>{return(
+      <div style={'height'>'20'? {overflowY:'scroll'}:null}>
+        <p>{task}</p>
+        <button type='button' onClick={()=>{deleteTodo(task)}}>삭제</button>
+        <button type='button'>수정</button>
+      </div>
+      )})
+      :null
+    }
+</div>);
 
 }
 export default App;
