@@ -1,15 +1,20 @@
 import React, {useEffect, useState} from 'react';
 import axios, * as others from 'axios';
+import dayjs from 'dayjs';
 import {Grid, Box, Container, FormControl, FormLabel, Input, InputLabel,
-  Select, Typography
-   ,Button} from '@mui/material';
-import Calendar from 'react-calendar'
-import 'react-calendar/dist/Calendar.css';
+  Select, Typography,Button, 
+} from '@mui/material';
+// import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
+// import Calendar from 'react-calendar'
+// import 'react-calendar/dist/Calendar.css';
 import Todolist from './views/Todolist.ejs';
+import MyCalendar from './component/MyCalendar';
 import Clock from './component/Clock';
 import Timer from './component/Timer';
 
 function App() {
+  const [value, setValue] = React.useState(dayjs('2022-04-17'));
+  
   const [mode,setMode] = useState('calendar')
   const [click,setClick] = useState(0)
   const [showTodo,setShowTodo] = useState(1)
@@ -68,7 +73,8 @@ function App() {
 
   return (
   <div style={{textAlign:'center'}}>
-      {mode === 'calendar'? <Calendar/>:<Clock/>}
+      {mode === 'calendar'? 
+          <MyCalendar/>:<Clock/>}
       {showTimer === 1? <Timer/>:null}
       <Button variant='contained' onClick={handleMode}>{mode}</Button>
       <Button variant='contained' onClick={handleTimer}>Timer</Button>
