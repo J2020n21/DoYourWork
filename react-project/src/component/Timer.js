@@ -4,11 +4,11 @@ export default function Timer() {
   const [min, setMin] = useState(0);
   const [sec, setSec] = useState(0);
   const [go, setGo] = useState(false);
-  const [mode, setMode] = useState("Normal")
+  const [mode, setMode] = useState("Pomodoro")
 
   const [session, setSession] = useState(8)//76543210
-  const [minP, setMinP] = useState(0);
-  const [secP, setSecP] = useState(3);
+  const [minP, setMinP] = useState(25);
+  const [secP, setSecP] = useState(0);
   const [goP, setGoP] = useState(false);
 
   var timerId;
@@ -37,18 +37,20 @@ useEffect(()=>{
         setMinP(minP-1)
         setSecP(59)
         if(minP === 0){ 
-          setSession(session-1) //ok
-          console.log(session%2)
-          if(session%2==1)setMinP(5) //?
-          else setMinP(24)
+          sessionSub1(); console.log(session) //8
+          if(session%2==0)setMinP(4) //rest
+          else setMinP(24) //work
         }
-        
       }
     }, 1000);
   }
   return()=>{clearInterval(timerId2)}
   
 })
+
+  const sessionSub1 = async() =>{
+    await setSession(session-1)
+  }
 
   const timerReset = () =>{
     setSec(0)
@@ -99,7 +101,10 @@ useEffect(()=>{
       <button type='button' onClick={PomodoroReset}>초기화</button>
       <button type='button' onClick={PomodoroStop}>멈춤</button>
       <button type='button' onClick={PomodoroGo}>시작</button>
-      <p>남은 세션:{parseInt(session/2)}</p>
+      {session/2 >0? <p>남은 세션:{parseInt(session/2)}</p>:
+        <p>4회 반복 완료! 초기화 버튼을 눌러주세요</p>
+      }
+      
       <p>{minP<10? '0'+minP:minP}:{secP<10? '0'+secP:secP}</p>
     </div>
     }
