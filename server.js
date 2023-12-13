@@ -32,6 +32,7 @@ app.get('/', async (req,res)=>{
   res.sendFile('index.html')
 })
 
+//todoList handle
 app.get('/getTodo',async(req,res)=>{
   try{
   const todos = await db.collection('todo_list').find().toArray();
@@ -68,6 +69,8 @@ app.delete('/deleteTodo/:task', async (req,res)=>{
   }
   
 })
+
+//schedule handle
 
 app.get('*', function (req, res) {
   res.sendFile(__dirname, '/react-project/build/index.html');

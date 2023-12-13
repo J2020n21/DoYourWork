@@ -30,12 +30,9 @@ function App() {
         await setTodoList([...todoList, ...nowContent])
       })
       .catch(e=>console.log("error:"+e))
-      //문제: 서버 재기동 시 todo가 반복되어서 밑에 한 번 더 나타남
-      //단순 브라우저 새로고침은 문제없음
   },[])
 
   const handleAddTodo = ()=>{
-    //post 요청을 data(todo)와 함께 보낸다. 응답을 받아서 설정한다.
     axios.post('http://localhost:8080/addTodo',{todo})
     .then(async (res)=>{
       await console.log(res.data);
@@ -80,23 +77,27 @@ function App() {
       <Button variant='contained' onClick={handleTimer}>Timer</Button>
   
     <form>
-      <input type='text' name='todo' value={todo}
+      <Input type='text' name='todo' value={todo} placeholder='Todo'
         onChange={(e)=>setTodo(e.target.value)}/>
-      <button type='button' onClick={()=>{handleAddTodo()}}>할일 작성</button>
-      <button type='button' onClick={()=>{showTodo===1? setShowTodo(0):setShowTodo(1)}}>접기</button>
+      <Button type='button' onClick={()=>{handleAddTodo()}}>할일 작성</Button>
+      <Button type='button' onClick={()=>{showTodo===1? setShowTodo(0):setShowTodo(1)}}>
+        {showTodo===1? '접기':'펴기'}
+      </Button>
     </form>
 
+    <div style={'height'>'20'? {overflowY:'scroll'}:null}>
     {showTodo === 1 && todoList?
     //전체 todoList에 스크롤 달기 
       todoList.map((task)=>{return(
-      <div style={'height'>'20'? {overflowY:'scroll'}:null}>
+        <>
         <p>{task}</p>
-        <button type='button' onClick={()=>{deleteTodo(task)}}>삭제</button>
-        <button type='button'>수정</button>
-      </div>
+        <Button type='button' variant='outlined' size='small' onClick={()=>{deleteTodo(task)}}>삭제</Button>
+        <Button type='button' variant='outlined' size='small'>수정</Button>
+        </>
       )})
       :null
     }
+    </div>
 </div>);
 
 }
