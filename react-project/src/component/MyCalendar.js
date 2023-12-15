@@ -29,7 +29,7 @@ function MyCalendar(){
   }
 
     return(
-    <>
+    <Box style={{'marginBottom':'10px'}}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DateCalendar
          showDaysOutsideCurrentMonth fixedWeekNumber={6}
@@ -54,7 +54,7 @@ function MyCalendar(){
           display:'block', width:'30%',
           marginLeft:'auto', marginRight:'auto'
         }}>일정 추가</Button>
-      </>
+      </Box>
     );
 
 }

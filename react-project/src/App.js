@@ -69,14 +69,13 @@ function App() {
 
 
   return (
-  <div style={{textAlign:'center'}}>
-      {mode === 'calendar'? 
-          <MyCalendar/>:<Clock/>}
+  <div style={{textAlign:'center', height:'100%'}}>
+      {mode === 'calendar'? <MyCalendar/>:<Clock/>}
       {showTimer === 1? <Timer/>:null}
       <Button variant='contained' onClick={handleMode}>{mode}</Button>
       <Button variant='contained' onClick={handleTimer}>Timer</Button>
   
-    <form>
+    <form style={{marginTop:'20px'}}>
       <Input type='text' name='todo' value={todo} placeholder='Todo'
         onChange={(e)=>setTodo(e.target.value)}/>
       <Button type='button' onClick={()=>{handleAddTodo()}}>할일 작성</Button>
@@ -85,9 +84,8 @@ function App() {
       </Button>
     </form>
 
-    <div style={'height'>'20'? {overflowY:'scroll'}:null}>
+    <div style={{height:'300px',overflowY:'scroll',marginTop:'20px'}}>
     {showTodo === 1 && todoList?
-    //전체 todoList에 스크롤 달기 
       todoList.map((task)=>{return(
         <>
         <p>{task}</p>

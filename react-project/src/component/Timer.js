@@ -1,4 +1,5 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect} from 'react';
+import {Button} from '@mui/material';
 
 export default function Timer() {
   const [min, setMin] = useState(0);
@@ -86,7 +87,8 @@ useEffect(()=>{
   }
 
   return (
-  <div style={{'border': '1px solid black'}}>
+  <div style={{'border': '1px solid grey', 'width': '30%', 
+    display:'block',marginLeft:'auto',marginRight:'auto','marginBottom':'5px','marginTop':'5px'}}>
     {mode === "Normal"?    
     <div>
       <div>Noraml Timer</div>
