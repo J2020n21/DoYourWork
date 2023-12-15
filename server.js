@@ -71,6 +71,45 @@ app.delete('/deleteTodo/:task', async (req,res)=>{
 })
 
 //schedule handle
+app.get('/getCalSchedule',async(req,res)=>{
+  try{
+    const calTodos = await db.collection('schedule_list').find().toArray();
+    await res.json(calTodos)
+  }
+  catch(e){
+    console.log(e)
+  }
+})
+
+app.post('/addSchedule',(req,res)=>{
+  try{
+    const {calData} = req.body
+    if (calData==''){alert("공백입니다")}
+    else{
+      console.log(calData)
+      db.collection('schedule_list').insertOne({date:calData.date,content:calData.content}) //날짜&할일 db저장
+      res.json(calData)
+    }
+  }
+  catch{
+    e => console.log(e)
+  }
+})
+
+app.delete('/deleteSchedule/:targetSchedule', async(req,res)=>{
+  const targetS = req.params.targetSchedule;
+  try{
+    await db.collection('schedule_list').deleteOne({content:targetS})
+  }
+  catch(e){console.log(e)}
+})
+
+app.delete('/deleteScheduleAll', async(req,res)=>{
+  try{
+    await db.collection('schedule_list').deleteMany({});
+  }
+  catch(e){console.log(e)}
+})
 
 app.get('*', function (req, res) {
   res.sendFile(__dirname, '/react-project/build/index.html');

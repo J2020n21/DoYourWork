@@ -13,8 +13,13 @@ export default function Clock() {
   },[])
 
   return (
-    !nowTime? 
-    <p>Loading...</p>
-    :<p>{nowTime}</p>
+    <div style={{'height':'300px','display':'flex','alignItems':'center','justifyContent':'center'}}>
+{      !nowTime? 
+      <div  style={{margin:'0'}} >Loading...</div>
+
+      :<div>
+        <h2 style={{margin:'0'}}>{nowTime}</h2>
+       </div>}
+      </div>
   )
 }

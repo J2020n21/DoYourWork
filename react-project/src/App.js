@@ -1,13 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import axios, * as others from 'axios';
 import dayjs from 'dayjs';
-import {Grid, Box, Container, FormControl, FormLabel, Input, InputLabel,
-  Select, Typography,Button, 
+import {Input,Button, 
 } from '@mui/material';
-// import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
-// import Calendar from 'react-calendar'
-// import 'react-calendar/dist/Calendar.css';
-import Todolist from './views/Todolist.ejs';
+
 import MyCalendar from './component/MyCalendar';
 import Clock from './component/Clock';
 import Timer from './component/Timer';
@@ -53,9 +49,9 @@ function App() {
     .catch(e=>console.log(e))
   }
 
-  const updateTodo = () =>{
-    //todo: make function- update the specific task user clicked.
-  }
+  // const updateTodo = () =>{
+  //   //todo: make function- update the specific task user clicked.
+  // }
 
   const handleMode = () =>{
     setClick(prevClick => prevClick+1)
@@ -78,8 +74,8 @@ function App() {
     <form style={{marginTop:'20px'}}>
       <Input type='text' name='todo' value={todo} placeholder='Todo'
         onChange={(e)=>setTodo(e.target.value)}/>
-      <Button type='button' onClick={()=>{handleAddTodo()}}>할일 작성</Button>
-      <Button type='button' onClick={()=>{showTodo===1? setShowTodo(0):setShowTodo(1)}}>
+      <Button type='button' variant='contained' onClick={()=>{handleAddTodo()}}>할일 작성</Button>
+      <Button type='button' variant='contained' onClick={()=>{showTodo===1? setShowTodo(0):setShowTodo(1)}}>
         {showTodo===1? '접기':'펴기'}
       </Button>
     </form>
@@ -90,7 +86,7 @@ function App() {
         <>
         <p>{task}</p>
         <Button type='button' variant='outlined' size='small' onClick={()=>{deleteTodo(task)}}>삭제</Button>
-        <Button type='button' variant='outlined' size='small'>수정</Button>
+        {/* <Button type='button' variant='outlined' size='small'>수정</Button> */}
         </>
       )})
       :null
